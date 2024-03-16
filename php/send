@@ -1,0 +1,41 @@
+#!/usr/bin/php
+<?php
+$fmt = 0; // fmt, version 
+$version = 1;
+
+// Create a 10 x 10 grid of red
+// Open a UDP socket
+$socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+
+// Open a UDP socket
+if (!$socket) {
+  echo("Error, can't create socket\n");
+  exit();
+}
+
+echo("press Ctrl-C to stop\n");
+// Create a 10 x 10 grid of red
+$c = 0;
+while (true) {
+    $i = 0;
+    while ($i < 10) {
+        $k = 0;
+        while($k < 10) {
+            // Set x,y and red, green, blue of the packet
+            $x = $i;
+            $y = $k;
+            $r = 0;
+            $g = 255;
+            $b = 0;
+            echo("packet: " . $c . " x: " . $i . " y: " . $k . "\n");
+            $packed = pack("ccSSccc", $fmt, $version, $x, $y, $r, $g, $b);
+            $k++;
+            $c++;
+            // Set server information and send each packet
+            socket_sendto($socket, $packed, strlen($packed), 0, '100.65.0.2', 5005);
+        }
+        $i++;
+    }
+}
+
+socket_close($socket);
