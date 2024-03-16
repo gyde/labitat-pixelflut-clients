@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+import socket
+import struct
+import sys
+import signal
+
+# Define the packet structure
+class px_data:
+    fmt = 0
+    version = 1
+    x = 0
+    y = 0
+    r = 0
+    g = 0
+    b = 0
+
+def main():
+    # Create a UDP socket
+    sockfd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    
+    # Set server information
+    serverAddr = ("100.65.0.2", 5005)
+
+    # Create and fill the header and data structures
+    pp = px_data()
+    pp.fmt = 0
+    pp.version = 1
+
+    print("Press Ctrl-C to stop")
+    # Create a 10 x 10 grid of red
+    while True:
+        c = 0
+        i = 1
+        while i < 10:
+            k = 1
+            while k < 10:
+                # Set x,y and red, green, blue of the packet
+                pp.x = i
+                pp.y = k
+                pp.r = 0
+                pp.g = 0
+                pp.b = 255
+                print("packet:", c, "x:", i, "y:", k)
+                k += 1
+                c += 1
+                # Send each packet
+                sockfd.sendto(struct.pack('BBHHBBB', pp.fmt, pp.version, pp.x, pp.y, pp.r, pp.g, pp.b), serverAddr)
+            i += 1
+
+    sockfd.close()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(0)
