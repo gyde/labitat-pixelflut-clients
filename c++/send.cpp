@@ -37,13 +37,14 @@ int main(int argc, char* argv[]) {
     pp.fmt = 0;     // Set the format
     pp.version = 1; // Set the version
 
+    std.cout << "press Ctrl-C to stop" << "\n";
     // Create a 10 x 10 grid of red
     while (true) {
         int c = 0;
         int i = 1;
-        while (i <= 10) {
+        while (i < 10) {
             int k = 1;
-            while (k <= 10) {
+            while (k < 10) {
                 // Set x,y and red, green, blue of the packet
                 pp.x = i;
                 pp.y = k;
